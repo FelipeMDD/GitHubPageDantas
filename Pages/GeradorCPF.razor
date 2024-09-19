@@ -1,0 +1,18 @@
+﻿@page "/gerar-cpf"
+@inject BlazorDantas.Features.GeradorCPF geradorCpfService
+
+<PageTitle>GeradorCPF</PageTitle>
+<h3>Gerar CPF</h3>
+
+<button @onclick="GerarCpf">Gerar CPF Válido</button>
+
+<p>CPF Gerado: @cpfGerado</p>
+
+@code {
+    private string cpfGerado = String.Empty;
+
+    private void GerarCpf()
+    {
+        cpfGerado = geradorCpfService.GerarCpfValido();
+    }
+}
