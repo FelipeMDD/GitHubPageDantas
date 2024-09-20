@@ -1,0 +1,71 @@
+﻿@page "/termo"
+@inject BlazorDantas.Features.Termo.PalavraService PalavraService
+@using BlazorDantas.Features
+
+<h3>Termo Game</h3>
+
+@if (game == null)
+{
+    <p>Carregando palavra...</p>
+}
+else
+{
+    <p>Você tem @game.TentativasRestantes tentativas restantes.</p>
+    <EditForm Model="palpite" OnValidSubmit="EnviarTentativa">
+        <InputText @bind-Value="palavraTentativa" placeholder="Digite sua tentativa..." />
+        <button type="submit">Enviar</button>
+    </EditForm>
+
+    @if (game.Historico.Count > 0)
+    {
+        <h4>Histórico de tentativas:</h4>
+        <ul>
+            @foreach (var tentativa in game.Historico)
+            {
+                <li>@tentativa.Palavra - @MostrarResultado(tentativa)</li>
+            }
+        </ul>
+    }
+
+    @if (game.JogoFinalizado)
+    {
+        <p>O jogo terminou! A palavra era: @game.PalavraCorreta</p>
+    }
+}
+
+@code {
+    private TermoGame game;
+    private string palavraTentativa = string.Empty;
+    private string palpite = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Carrega a palavra aleatória do JSON
+        var palavraAleatoria = await PalavraService.ObterPalavraAleatoria();
+        game = new TermoGame(palavraAleatoria);
+    }
+
+    private void EnviarTentativa()
+    {
+        if (!string.IsNullOrEmpty(palavraTentativa))
+        {
+            game.VerificarTentativa(palavraTentativa);
+            palavraTentativa = string.Empty;
+        }
+    }
+
+    private string MostrarResultado(Tentativa tentativa)
+    {
+        var resultado = "";
+        for (int i = 0; i < tentativa.Resultado.Length; i++)
+        {
+            resultado += tentativa.Resultado[i] switch
+            {
+                LetraResultado.Correta => "🟩",
+                LetraResultado.LugarErrado => "🟨",
+                _ => "⬜"
+            };
+        }
+        return resultado;
+    }
+}
