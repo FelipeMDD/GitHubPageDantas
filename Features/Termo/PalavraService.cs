@@ -14,7 +14,7 @@ namespace BlazorDantas.Features.Termo
         public async Task<string> ObterPalavraAleatoria()
         {
             // Caminho relativo ao local do binário
-            var caminhoArquivo = Path.Combine(Directory.GetCurrentDirectory(), "Termo", "ListaPalavras.json");
+            var caminhoArquivo = Path.Combine(AppContext.BaseDirectory, "Features", "Termo", "ListaPalavras.json");
 
             // Certifique-se de que o arquivo existe
             if (File.Exists(caminhoArquivo))
