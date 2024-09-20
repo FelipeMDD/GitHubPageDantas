@@ -10,33 +10,42 @@ using Microsoft.AspNetCore.Components;
 namespace BlazorDantas.Features.Termo
 {
     public class PalavraService
-    {
+    {  
         public async Task<string> ObterPalavraAleatoria()
         {
-            // Caminho relativo ao local do binário
-            var caminhoArquivo = Path.Combine(AppContext.BaseDirectory, "Features", "Termo", "ListaPalavras.json");
+            var palavrasCincoLetras = new List<string>
+                {
+                    "acaso", "achar", "adiar", "ainda", "ajuda", "aliar", "amigo", "andar", "anexo", "antes", "apelo",
+                    "apito", "areia", "aroma", "assim", "astro", "atomo", "atual", "autor", "aviso", "beber", "bicho",
+                    "blusa", "bolsa", "brasa", "braço", "briga", "burro", "cabra", "cacho", "caixa", "caldo", "calma",
+                    "campo", "canoa", "capaz", "carta", "carro", "casal", "casas", "ceder", "cenho", "certo", "cesta",
+                    "chato", "cheio", "chuva", "claro", "clima", "cobra", "coisa", "conta", "corpo", "cravo", "credo",
+                    "criar", "culpa", "curva", "dados", "dança", "dedos", "deixa", "desde", "deste", "dever", "diabo",
+                    "dizer", "dobro", "doido", "dores", "douto", "droga", "duplo", "elite", "enfim", "entra", "entre",
+                    "errar", "essas", "esses", "estar", "etapa", "exame", "exato", "extra", "falar", "falta", "fases",
+                    "feliz", "feroz", "ferro", "feudo", "final", "firme", "fluir", "força", "fraco", "frase", "frito",
+                    "fruta", "fugir", "furto", "galho", "ganho", "garra", "gasto", "gente", "gesso", "globo", "graça",
+                    "grato", "grupo", "guiaa", "humor", "ideia", "igual", "impor", "indio", "inves", "irado", "janela",
+                    "jeito", "junto", "largo", "lento", "leque", "leste", "levar", "livro", "lugar", "luzes", "macro",
+                    "magro", "manso", "massa", "matar", "medir", "meiga", "melar", "membro", "mesmo", "metal", "moeda",
+                    "monta", "moral", "motivo", "mudar", "muito", "mural", "museu", "nadar", "navio", "nobre", "noite",
+                    "norte", "nossa", "novos", "nuvem", "obrar", "odiar", "ontem", "outra", "ouvir", "padre", "pagar",
+                    "palma", "parte", "passo", "pauta", "pegar", "penso", "perda", "piano", "pilar", "pingo", "pinta",
+                    "pista", "poder", "porta", "prato", "preto", "pular", "puxar", "raiva", "rasgo", "rasto", "reino",
+                    "risco", "ritmo", "rodar", "rosto", "roubo", "saber", "salao", "salto", "santo", "seara", "selar",
+                    "senso", "serao", "sexta", "sigla", "sinal", "sitio", "sobre", "sonho", "sorte", "subir", "talha",
+                    "tarde", "tenso", "terra", "tempo", "texto", "tinha", "tocar", "tonto", "torre", "traga", "trago",
+                    "trama", "trato", "treta", "troca", "unido", "untar", "urgir", "vacas", "vazio", "velho", "verde",
+                    "verbo", "vezes", "visto", "viver", "volta", "votar", "xicar", "zelar", "termo"
+                };
 
-            // Certifique-se de que o arquivo existe
-            if (File.Exists(caminhoArquivo))
-            {
-                // Ler o arquivo diretamente do sistema de arquivos
-                var jsonString = await File.ReadAllTextAsync(caminhoArquivo);
-                var palavras = JsonSerializer.Deserialize<Palavras>(jsonString);
 
-                // Seleciona uma palavra aleatória
-                var random = new Random();
-                int index = random.Next(palavras.ListaPalavras.Count);
-                return palavras.ListaPalavras[index];
-            }
-            else
-            {
-                throw new FileNotFoundException("O arquivo ListaPalavras.json não foi encontrado.");
-            }
+            var random = new Random();
+            int index = random.Next(palavrasCincoLetras.Count);
+            var palavraAleatoria = palavrasCincoLetras[index];
+
+            return  palavraAleatoria;
         }
-    }
 
-    public class Palavras
-    {
-        public List<string> ListaPalavras { get; set; }
     }
 }
