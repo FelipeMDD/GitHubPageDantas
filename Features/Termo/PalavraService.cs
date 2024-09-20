@@ -11,28 +11,32 @@ namespace BlazorDantas.Features.Termo
 {
     public class PalavraService
     {
-        private readonly HttpClient _httpClient;
-
-        public PalavraService(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
-        }
-
         public async Task<string> ObterPalavraAleatoria()
         {
-            // Carrega o arquivo JSON do wwwroot
-            var response = await _httpClient.GetStringAsync("palavras.json");
-            var palavras = JsonSerializer.Deserialize<Palavras>(response);
+            // Caminho relativo ao local do binário
+            var caminhoArquivo = Path.Combine(Directory.GetCurrentDirectory(), "Termo", "ListaPalavras.json");
 
-            // Seleciona uma palavra aleatória
-            var random = new Random();
-            int index = random.Next(palavras.ListaPalavras.Count);
-            return palavras.ListaPalavras[index];
+            // Certifique-se de que o arquivo existe
+            if (File.Exists(caminhoArquivo))
+            {
+                // Ler o arquivo diretamente do sistema de arquivos
+                var jsonString = await File.ReadAllTextAsync(caminhoArquivo);
+                var palavras = JsonSerializer.Deserialize<Palavras>(jsonString);
+
+                // Seleciona uma palavra aleatória
+                var random = new Random();
+                int index = random.Next(palavras.ListaPalavras.Count);
+                return palavras.ListaPalavras[index];
+            }
+            else
+            {
+                throw new FileNotFoundException("O arquivo ListaPalavras.json não foi encontrado.");
+            }
         }
     }
 
     public class Palavras
     {
-        public List<string>? ListaPalavras { get; set; }
+        public List<string> ListaPalavras { get; set; }
     }
 }
